@@ -1,7 +1,14 @@
 import express from "express";
+import indexRouter from "./routes/indexRouter.js";
+import cardsRouter from "./routes/cardsRouter.js";
+import connectToDB from "./config/db.js";
 
+const PORT = process.env.PORT || 3001;
 const app = express();
 
-app.listen(process.env.PORT || 3000, () =>
-  console.log("Server listening on port 3000!")
-);
+connectToDB();
+
+app.use("/", indexRouter);
+app.use("/cards", cardsRouter);
+
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
