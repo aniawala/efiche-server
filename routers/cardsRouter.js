@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 router.get("/", getCards);
-router.post("/", createCard);
 router.get("/:id", getCard);
+router.post("/", createCard);
 router.patch("/:id", updateCard);
 router.delete("/:id", deleteCard);
 
