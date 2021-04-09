@@ -25,8 +25,8 @@ export const getCard = async (req, res) => {
 };
 
 export const createCard = async (req, res) => {
-  const { question, answer, category } = req.body;
-  const newCard = new Card({ question, answer, category });
+  const { question, answer, categoryId } = req.body;
+  const newCard = new Card({ question, answer, categoryId });
 
   try {
     await newCard.save();
@@ -38,13 +38,13 @@ export const createCard = async (req, res) => {
 
 export const updateCard = async (req, res) => {
   const { id } = req.params;
-  const { question, answer, category } = req.body;
+  const { question, answer, categoryId } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`Cannot find card with id ${id}`);
 
-  const updatedCard = { question, answer, category, _id: id };
-  await Card.findByIdAndUpdate(id, updateCard, { new: true });
+  const updatedCard = { question, answer, categoryId, _id: id };
+  await Card.findByIdAndUpdate(id, updatedCard);
 
   res.json(updatedCard);
 };
