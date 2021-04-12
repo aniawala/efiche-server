@@ -7,12 +7,12 @@ import {
   deleteCard,
 } from "../controllers/cardsController.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.get("/", getCards);
-router.get("/:id", getCard);
+router.get("/:cardId", getCard);
 router.post("/", createCard);
-router.patch("/:id", updateCard);
-router.delete("/:id", deleteCard);
+router.put("/:cardId", updateCard);
+router.delete("/:cardId", deleteCard);
 
 export default router;
