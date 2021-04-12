@@ -6,8 +6,9 @@ import Card from "../models/cardModel.js";
 const router = express.Router();
 
 export const getCards = async (req, res) => {
+  const { categoryId } = req.params;
   try {
-    const cards = await Card.find();
+    const cards = await Card.find({ categoryId: categoryId });
     res.status(200).json(cards);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -15,9 +16,9 @@ export const getCards = async (req, res) => {
 };
 
 export const getCard = async (req, res) => {
-  const { id } = req.params;
+  const { _, cardId } = req.params;
   try {
-    const card = await Card.findById(id);
+    const card = await Card.findById(cardId);
     res.status(200).json(card);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -25,7 +26,8 @@ export const getCard = async (req, res) => {
 };
 
 export const createCard = async (req, res) => {
-  const { question, answer, categoryId } = req.body;
+  const { categoryId } = req.params;
+  const { question, answer } = req.body;
   const newCard = new Card({ question, answer, categoryId });
 
   try {
@@ -37,24 +39,24 @@ export const createCard = async (req, res) => {
 };
 
 export const updateCard = async (req, res) => {
-  const { id } = req.params;
-  const { question, answer, categoryId } = req.body;
+  const { categoryId, cardId } = req.params;
+  const { question, answer } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`Cannot find card with id ${id}`);
+  if (!mongoose.Types.ObjectId.isValid(cardId))
+    return res.status(404).send(`Cannot find card with id ${cardId}`);
 
-  const updatedCard = { question, answer, categoryId, _id: id };
-  await Card.findByIdAndUpdate(id, updatedCard);
+  const updatedCard = { question, answer, categoryId, _id: cardId };
+  await Card.findByIdAndUpdate(cardId, updatedCard);
 
   res.json(updatedCard);
 };
 
 export const deleteCard = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`Cannot find card with id ${id}`);
+  const { _, cardId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(cardId))
+    return res.status(404).send(`Cannot find card with id ${cardId}`);
 
-  await Card.findByIdAndRemove(id);
+  await Card.findByIdAndRemove(cardId);
   res.json({ message: "Card successfully removed" });
 };
 

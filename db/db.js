@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
-import config from "config";
+import dotenv from "dotenv";
 
-const db = config.get("mongoURI");
+dotenv.config();
 
 async function connectToDB() {
   try {
-    await mongoose.connect(db, {
+    await mongoose.connect(process.env.DATABASE_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
-      returnOriginal: false,
     });
     console.log("Database connection established!");
   } catch (err) {

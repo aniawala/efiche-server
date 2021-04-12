@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-
-import Category from "../models/categoryModel";
+import Category from "../models/categoryModel.js";
+import Card from "../models/cardModel.js";
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ export const getCategories = async (req, res) => {
 };
 
 export const getCategory = async (req, res) => {
-  const { id } = req.params;
+  const { categoryId } = req.params;
   try {
-    const category = await Category.findById(id);
+    const category = await Category.findById(categoryId);
     res.status(200).json(category);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -37,25 +37,25 @@ export const createCategory = async (req, res) => {
 };
 
 export const updateCategory = async (req, res) => {
-  const { id } = req.params;
+  const { categoryId } = req.params;
   const { name, cardsVolume } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`Cannot find category with id ${id}`);
+  if (!mongoose.Types.ObjectId.isValid(categoryId))
+    return res.status(404).send(`Cannot find category with id ${categoryId}`);
 
-  const updatedCategory = { name, cardsVolume, _id: id };
-  await Category.findByIdAndUpdate(id, updatedCategory);
+  const updatedCategory = { name, cardsVolume, _id: categoryId };
+  await Category.findByIdAndUpdate(categoryId, updatedCategory);
 
   res.json(updatedCategory);
 };
 
 export const deleteCategory = async (req, res) => {
-  const { id } = req.params;
+  const { categoryId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`Cannot find category with id ${id}`);
-
-  await Category.findByIdAndRemove(id);
+  if (!mongoose.Types.ObjectId.isValid(categoryId))
+    return res.status(404).send(`Cannot find category with id ${categoryId}`);
+  await Card.deleteMany({ categoryId: categoryId });
+  await Category.findByIdAndRemove(categoryId);
   res.json({ message: "Category successfully removed" });
 };
 
