@@ -38,12 +38,12 @@ export const createCategory = async (req, res) => {
 
 export const updateCategory = async (req, res) => {
   const { categoryId } = req.params;
-  const { name, cardsVolume } = req.body;
+  const { name } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(categoryId))
     return res.status(404).send(`Cannot find category with id ${categoryId}`);
 
-  const updatedCategory = { name, cardsVolume, _id: categoryId };
+  const updatedCategory = { name, _id: categoryId };
   await Category.findByIdAndUpdate(categoryId, updatedCategory);
 
   res.json(updatedCategory);
@@ -57,6 +57,16 @@ export const deleteCategory = async (req, res) => {
   await Card.deleteMany({ categoryId: categoryId });
   await Category.findByIdAndRemove(categoryId);
   res.json({ message: "Category successfully removed" });
+};
+
+export const getCategoryCards = async (req, res) => {
+  const { categoryId } = req.params;
+  try {
+    const cards = await Card.find({ categoryId: categoryId });
+    res.status(200).json(cards);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
 };
 
 export default router;
