@@ -12,8 +12,8 @@ connectToDB();
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", indexRouter);
-app.use("/categories", categoriesRouter);
-app.use("/categories/:categoryId/cards", cardsRouter);
+app.use("/api", indexRouter);
+app.use("/api/categories", categoriesRouter);
+app.use("/api/cards", cardsRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));

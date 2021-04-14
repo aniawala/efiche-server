@@ -7,10 +7,6 @@ const categorySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    cardsVolume: {
-      type: Number,
-      default: 0,
-    },
   },
   { timestamps: true }
 );
