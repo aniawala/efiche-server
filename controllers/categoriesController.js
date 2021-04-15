@@ -1,9 +1,5 @@
-import express from "express";
-import mongoose from "mongoose";
 import Category from "../models/categoryModel.js";
 import Card from "../models/cardModel.js";
-
-const router = express.Router();
 
 export const getCategories = async (req, res) => {
   try {
@@ -62,11 +58,9 @@ export const deleteCategory = async (req, res) => {
 export const getCategoryCards = async (req, res) => {
   const { categoryId } = req.params;
   try {
-    const cards = await Card.find({ categoryId: categoryId });
+    const cards = await Card.find({ categoryId });
     res.status(200).json(cards);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
-
-export default router;

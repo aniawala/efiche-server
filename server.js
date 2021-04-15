@@ -1,8 +1,13 @@
 import express from "express";
-import indexRouter from "./routers/indexRouter.js";
-import categoriesRouter from "./routers/categoriesRouter.js";
-import cardsRouter from "./routers/cardsRouter.js";
+import dotenv from "dotenv";
+import indexRoutes from "./routes/indexRoutes.js";
+import usersRoutes from "./routes/usersRoutes.js";
+import categoriesRoutes from "./routes/categoriesRoutes.js";
+import cardsRoutes from "./routes/cardsRoutes.js";
 import connectToDB from "./db/db.js";
+import auth from "./middleware/authMiddleware.js";
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -12,8 +17,9 @@ connectToDB();
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", indexRouter);
-app.use("/api/categories", categoriesRouter);
-app.use("/api/cards", cardsRouter);
+app.use("/api", indexRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/categories", auth, categoriesRoutes);
+app.use("/api/cards", auth, cardsRoutes);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
