@@ -1,9 +1,4 @@
-import express from "express";
-import mongoose from "mongoose";
-
 import Card from "../models/cardModel.js";
-
-const router = express.Router();
 
 export const getCards = async (req, res) => {
   try {
@@ -57,5 +52,3 @@ export const deleteCard = async (req, res) => {
   await Card.findByIdAndRemove(cardId);
   res.json({ message: "Card successfully removed" });
 };
-
-export default router;
