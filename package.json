@@ -2,11 +2,12 @@
   "name": "efiche-server",
   "version": "1.0.0",
   "description": "Server for efiche app",
-  "main": "server.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "mocha --recursive --exit"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,10 @@
     "mongoose": "^5.12.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "sinon": "^10.0.0"
   }
 }
