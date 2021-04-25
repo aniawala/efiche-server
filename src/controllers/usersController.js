@@ -1,26 +1,16 @@
 import bcryptjs from "bcryptjs";
-import User from "../models/userModel.js";
-import Joi from "joi";
 import jwt from "jsonwebtoken";
-
-const validateUserRegisterData = async (userData) => {
-  const schema = Joi.object({
-    username: Joi.string().alphanum().min(4).max(30).required(),
-    email: Joi.string().required().email(),
-    password: Joi.string().min(6).max(255).required(),
-  });
-  return await schema.validateAsync(userData);
-};
+import validateNewUserData from "../utils/validation.js";
+import User from "../models/userModel.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const result = await validateUserRegisterData(req.body);
+    const result = await validateNewUserData(req.body);
     const { username, email, password } = result;
     if (await User.findOne({ username }))
       return res.status(409).json({ message: "Username already exists" });
     if (await User.findOne({ email }))
       return res.status(409).json({ message: "Email already exists" });
-
     const hashedPassword = await bcryptjs.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();

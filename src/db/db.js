@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-async function connectToDB() {
+async function connectToDatabase() {
   try {
     await mongoose.connect(process.env.DATABASE_URL, {
       useNewUrlParser: true,
@@ -8,11 +8,10 @@ async function connectToDB() {
       useFindAndModify: false,
       useCreateIndex: true,
     });
-    console.log("Database connection established!");
   } catch (err) {
     console.error(err.message);
     process.exit(1);
   }
 }
 
-export default connectToDB;
+export default connectToDatabase;
