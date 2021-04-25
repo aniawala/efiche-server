@@ -79,14 +79,6 @@ describe("Users controller", () => {
         status: sinon.stub().returns({ json: sinon.spy() }),
       };
     });
-    casesOfInvalidRegisterData.forEach(({ issueDescription, userData }) => {
-      it(`should not register user if ${issueDescription}`, async () => {
-        const req = { body: userData };
-        await registerUser(req, res);
-        expect(res.status.calledOnce).to.be.true;
-        expect(res.status.calledWith(404)).to.be.true;
-      });
-    });
     it("should register user if all user data valid", async () => {
       const req = {
         body: { username: "foobar", email: "foo@bar.com", password: "foobar" },
@@ -94,6 +86,14 @@ describe("Users controller", () => {
       await registerUser(req, res);
       expect(res.status.calledOnce).to.be.true;
       expect(res.status.calledWith(201)).to.be.true;
+    });
+    casesOfInvalidRegisterData.forEach(({ issueDescription, userData }) => {
+      it(`should not register user if ${issueDescription}`, async () => {
+        const req = { body: userData };
+        await registerUser(req, res);
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.calledWith(404)).to.be.true;
+      });
     });
     // it("should not register user if username already exists", () => {});
     // it("should not register user if email already exists", () => {});
