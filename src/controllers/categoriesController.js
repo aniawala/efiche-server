@@ -51,10 +51,9 @@ export const updateCategory = async (req, res) => {
     return res.status(400).json({ message: "Invalid category ID" });
 
   const { name } = req.body;
-  if (!name) return res.status(400).json({ message: "Name is required" });
   if (await Category.findOne({ name }))
     return res.status(400).json({ message: "Category already exists" });
-  const updatedCategory = { name, _id: categoryId };
+  const updatedCategory = { name };
   await Category.findByIdAndUpdate(categoryId, updatedCategory);
 
   res.json(updatedCategory);

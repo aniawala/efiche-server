@@ -1,8 +1,9 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import bcryptjs from "bcryptjs";
-import app from "../../app.js";
-import User from "../../models/userModel.js";
+import app from "../../src/app.js";
+import User from "../../src/models/userModel.js";
+import { clearDb } from "./utils.js";
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -76,14 +77,14 @@ const casesOfInvalidRegisterData = [
 ];
 
 describe("Users API", () => {
-  before(async () => {
-    await User.deleteMany({});
-  });
-  afterEach(async () => {
-    await User.deleteMany({});
-  });
   const registerRoute = "/api/users/register";
   const loginRoute = "/api/users/login";
+  before(async () => {
+    await clearDb();
+  });
+  afterEach(async () => {
+    await clearDb();
+  });
   describe(`POST ${registerRoute}`, () => {
     it("should register user if valid user data provided", async () => {
       const userData = {

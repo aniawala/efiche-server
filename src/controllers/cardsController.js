@@ -35,7 +35,7 @@ export const createCard = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(userId))
     return res.status(400).json({ message: "Invalid user ID" });
 
-  if (await Card.findOne({ question }))
+  if (await Card.findOne({ question, categoryId }))
     return res.status(400).json({ message: "Card already exists" });
   const newCard = new Card({ question, answer, categoryId, userId });
 
@@ -53,13 +53,15 @@ export const updateCard = async (req, res) => {
     return res.status(400).json({ message: "Invalid card ID" });
 
   const { question, answer, categoryId } = req.body;
-  if (!question)
-    return res.status(400).json({ message: "Question is required " });
-  if (!answer) return res.status(400).json({ message: "Answer is required" });
-  if (!mongoose.Types.ObjectId.isValid(categoryId))
-    return res.status(400).json({ message: "Invalid category ID" });
+  const updatedCard = {};
+  if (question) updatedCard.question = question;
+  if (answer) updatedCard.answer = answer;
+  if (categoryId) {
+    if (!mongoose.Types.ObjectId.isValid(categoryId))
+      return res.status(400).json({ message: "Invalid category ID" });
+    updatedCard.categoryId = categoryId;
+  }
 
-  const updatedCard = { question, answer, categoryId };
   try {
     await Card.findByIdAndUpdate(cardId, updatedCard);
     res.json(updatedCard);
