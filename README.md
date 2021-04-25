@@ -1,6 +1,6 @@
 # efiche-server
 
-> Efiche-server is a backend server for an app called eFiche.
+> Efiche-server is a backend for an app called eFiche.
 
 ## What eFiche is?
 
