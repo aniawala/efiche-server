@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import validateNewUserData from "../utils/validation.js";
 import User from "../models/userModel.js";
 
-export const registerUser = async (req, res) => {
+export const signupUser = async (req, res) => {
   try {
     const result = await validateNewUserData(req.body);
     const { username, email, password } = result;

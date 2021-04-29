@@ -19,11 +19,11 @@ export const createUserSession = async () => {
     email: "foo@bar.com",
     password: "foobar",
   };
-  const registerRes = await chai
+  const signupRes = await chai
     .request(app)
-    .post("/api/users/register")
+    .post("/api/users/signup")
     .send(userData);
-  const userId = registerRes.body._id;
+  const userId = signupRes.body._id;
   const loginRes = await chai
     .request(app)
     .post("/api/users/login")

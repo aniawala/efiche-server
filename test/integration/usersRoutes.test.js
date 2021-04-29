@@ -8,7 +8,7 @@ import { clearDb } from "./utils.js";
 const { expect } = chai;
 chai.use(chaiHttp);
 
-const casesOfInvalidRegisterData = [
+const casesOfInvalidSignupData = [
   {
     issueDescription: "username not provided",
     userData: { email: "foo@bar.com", password: "foobar" },
@@ -77,7 +77,7 @@ const casesOfInvalidRegisterData = [
 ];
 
 describe("Users API", () => {
-  const registerRoute = "/api/users/register";
+  const signupRoute = "/api/users/signup";
   const loginRoute = "/api/users/login";
   before(async () => {
     await clearDb();
@@ -85,17 +85,17 @@ describe("Users API", () => {
   afterEach(async () => {
     await clearDb();
   });
-  describe(`POST ${registerRoute}`, () => {
-    it("should register user if valid user data provided", async () => {
+  describe(`POST ${signupRoute}`, () => {
+    it("should signup user if valid user data provided", async () => {
       const userData = {
         username: "foobar",
         email: "foo@bar.com",
         password: "foobar",
       };
-      const res = await chai.request(app).post(registerRoute).send(userData);
+      const res = await chai.request(app).post(signupRoute).send(userData);
       expect(res).to.have.status(201);
     });
-    it("should not register user if username already exists", async () => {
+    it("should not signup user if username already exists", async () => {
       const userData = {
         username: "foobar",
         email: "foo@bar.com",
@@ -103,10 +103,10 @@ describe("Users API", () => {
       };
       const newUser = new User(userData);
       await newUser.save();
-      const res = await chai.request(app).post(registerRoute).send(userData);
+      const res = await chai.request(app).post(signupRoute).send(userData);
       expect(res).to.have.status(409);
     });
-    it("should not register user if email already exists", async () => {
+    it("should not signup user if email already exists", async () => {
       let userData = {
         username: "foobar",
         email: "foo@bar.com",
@@ -115,12 +115,12 @@ describe("Users API", () => {
       const newUser = new User(userData);
       await newUser.save();
       userData.username = "foobarfoo";
-      const res = await chai.request(app).post(registerRoute).send(userData);
+      const res = await chai.request(app).post(signupRoute).send(userData);
       expect(res).to.have.status(409);
     });
-    casesOfInvalidRegisterData.forEach(({ issueDescription, userData }) => {
-      it(`should not register user if ${issueDescription}`, async () => {
-        const res = await chai.request(app).post(registerRoute).send(userData);
+    casesOfInvalidSignupData.forEach(({ issueDescription, userData }) => {
+      it(`should not signup user if ${issueDescription}`, async () => {
+        const res = await chai.request(app).post(signupRoute).send(userData);
         expect(res).to.have.status(404);
       });
     });
