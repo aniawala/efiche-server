@@ -1,9 +1,9 @@
 import chai from "chai";
 import sinon from "sinon";
-import { registerUser } from "../../src/controllers/usersController.js";
+import { signupUser } from "../../src/controllers/usersController.js";
 
 const { expect } = chai;
-const casesOfInvalidRegisterData = [
+const casesOfInvalidSignupData = [
   {
     issueDescription: "username not provided",
     userData: { email: "foo@bar.com", password: "foobar" },
@@ -72,30 +72,30 @@ const casesOfInvalidRegisterData = [
 ];
 
 describe("Users controller", () => {
-  describe("#registerUser()", () => {
+  describe("#signupUser()", () => {
     let res;
     beforeEach(() => {
       res = {
         status: sinon.stub().returns({ json: sinon.spy() }),
       };
     });
-    it("should register user if all user data valid", async () => {
+    it("should signup user if all user data valid", async () => {
       const req = {
         body: { username: "foobar", email: "foo@bar.com", password: "foobar" },
       };
-      await registerUser(req, res);
+      await signupUser(req, res);
       expect(res.status.calledOnce).to.be.true;
       expect(res.status.calledWith(201)).to.be.true;
     });
-    casesOfInvalidRegisterData.forEach(({ issueDescription, userData }) => {
-      it(`should not register user if ${issueDescription}`, async () => {
+    casesOfInvalidSignupData.forEach(({ issueDescription, userData }) => {
+      it(`should not signup user if ${issueDescription}`, async () => {
         const req = { body: userData };
-        await registerUser(req, res);
+        await signupUser(req, res);
         expect(res.status.calledOnce).to.be.true;
         expect(res.status.calledWith(404)).to.be.true;
       });
     });
-    // it("should not register user if username already exists", () => {});
-    // it("should not register user if email already exists", () => {});
+    // it("should not signup user if username already exists", () => {});
+    // it("should not signup user if email already exists", () => {});
   });
 });
