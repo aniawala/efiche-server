@@ -121,7 +121,7 @@ describe("Users API", () => {
     casesOfInvalidSignupData.forEach(({ issueDescription, userData }) => {
       it(`should not signup user if ${issueDescription}`, async () => {
         const res = await chai.request(app).post(signupRoute).send(userData);
-        expect(res).to.have.status(404);
+        expect(res).to.have.status(422);
       });
     });
   });

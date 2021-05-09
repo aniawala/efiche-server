@@ -2,6 +2,9 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validateNewUserData from "../utils/validation.js";
 import User from "../models/userModel.js";
+import joi from "joi";
+
+const { ValidationError } = joi;
 
 export const signupUser = async (req, res) => {
   try {
@@ -16,7 +19,9 @@ export const signupUser = async (req, res) => {
     await newUser.save();
     res.status(201).json(newUser);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    if (err instanceof ValidationError)
+      return res.status(422).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -38,7 +43,10 @@ export const loginUser = async (req, res) => {
         },
         process.env.JWT_SECRET
       );
-      return res.json({ accessToken: token });
+      return res.json({
+        accessToken: token,
+        user: { id: user._id, name: user.username },
+      });
     }
     res.status(400).json({ message: "Invalid password" });
   } catch (err) {
