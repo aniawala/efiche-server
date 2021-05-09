@@ -92,7 +92,7 @@ describe("Users controller", () => {
         const req = { body: userData };
         await signupUser(req, res);
         expect(res.status.calledOnce).to.be.true;
-        expect(res.status.calledWith(404)).to.be.true;
+        expect(res.status.calledWith(422)).to.be.true;
       });
     });
     // it("should not signup user if username already exists", () => {});
